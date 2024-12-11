@@ -31,14 +31,14 @@ const Button = ({ children, onClick, className, disabled, gender }) => {
       return {
         bgColor: "bg-blue-500",
         hoverColor: "hover:bg-blue-600",
-        textColor: "text-white",
+        textColor: "text-black",
       };
     }
     // Default to female styles
     return {
       bgColor: "bg-pink-300",
       hoverColor: "hover:bg-pink-600",
-      textColor: "text-white",
+      textColor: "text-black",
     };
   };
 
