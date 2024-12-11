@@ -6,7 +6,7 @@ const fontFamily = "font-[Comfortaa]";
 
 // Components
 const Card = ({ children, className }) => (
-  <div className={`rounded-lg shadow-lg p-4 bg-white ${className}`}>{children}</div>
+  <div className={`rounded-lg  p-4 bg-white ${className}`}>{children}</div>
 );
 
 const CardHeader = ({ children, className }) => (
@@ -48,7 +48,7 @@ const Button = ({ children, onClick, className, disabled, gender }) => {
     <button
   onClick={onClick}
   disabled={disabled}
-  className={`px-4 py-2 rounded-lg bg-white font-medium transition-all duration-300 
+  className={`px-4 py-2 rounded-lg text-black bg-white font-medium transition-all duration-300 
     ${disabled
       ? "bg-gray-300 cursor-not-allowed"
       : `hover:scale-105 hover:shadow-lg ${styles.textColor}`
@@ -300,7 +300,7 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
     </div>
   ) : (
     <div className={`flex items-center  justify-center  ${fontFamily}`}>
-      <Card className={`w-full max-w-md shadow-2xl border-2 ${genderStyles.borderColor}`}>
+      <Card className={`w-full max-w-md `}>
         <div className="flex items-center justify-between mb-4">
           {questions[gender].map((_, index) => (
             <div
