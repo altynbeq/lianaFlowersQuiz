@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'Comfortaa', sans-serif;
+  }
+
+  .subtle-border {
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Light border with low opacity */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+    border-radius: 8px; /* Smooth rounded corners */
+  }
