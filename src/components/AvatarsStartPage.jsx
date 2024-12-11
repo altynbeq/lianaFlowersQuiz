@@ -1,3 +1,5 @@
+// src/components/AvatarStartPage.jsx
+
 import React, { useState, useRef } from "react";
 import one from "../assets/avatars/1.webp";
 import two from "../assets/avatars/2.webp";
@@ -6,7 +8,8 @@ import four from "../assets/avatars/4.webp";
 import five from "../assets/avatars/5.jpg";
 import six from "../assets/avatars/6.webp";
 import logo from "../assets/logo.svg";
-import { sendPhoto } from "../functions/sendPhoto";
+import axios from "axios"; // Ensure axios is installed
+import imageCompression from "browser-image-compression"; // Ensure this is installed
 
 const avatarImages = [one, two, three, four, five, six];
 
@@ -14,13 +17,15 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
   const [images, setImages] = useState(Array(6).fill(null));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
-  const [uploadedPhoto, setUploadedPhoto] = useState(null);
+  const [uploadedPhoto, setUploadedPhoto] = useState(null); // This will be the File object
+  const [previewUrl, setPreviewUrl] = useState(null); // For image preview
   const fileInputRef = useRef(null);
 
   const openInitialModal = () => {
     setIsModalOpen(true);
     setIsPhotoModalOpen(false);
     setUploadedPhoto(null);
+    setPreviewUrl(null);
   };
 
   const closeInitialModal = () => {
@@ -47,16 +52,16 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setUploadedPhoto(reader.result);
-      openPhotoModal();
-    };
-    reader.readAsDataURL(file);
+    // Optional: Validate file type and size here
+
+    setUploadedPhoto(file);
+    setPreviewUrl(URL.createObjectURL(file)); // Create a preview URL
+    openPhotoModal();
   };
 
   const deletePhoto = () => {
     setUploadedPhoto(null);
+    setPreviewUrl(null);
     setIsPhotoModalOpen(false);
     openFileDialog();
   };
@@ -66,22 +71,46 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
 
     if (uploadedPhoto && onPhotoUploadDone) {
       try {
-        // Send the photo to the Netlify Function
-        const response = await fetch('/.netlify/functions/sendPhotos', {
-          method: 'POST',
+        // Step 1: Compress the image (Optional but recommended)
+        const options = {
+          maxSizeMB: 1, // Maximum size in MB
+          maxWidthOrHeight: 1024, // Max width or height
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(uploadedPhoto, options);
+
+        // Step 2: Upload the image to Cloudinary
+        const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+        const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+
+        const formData = new FormData();
+        formData.append("file", compressedFile);
+        formData.append("upload_preset", uploadPreset);
+
+        const cloudinaryResponse = await axios.post(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          formData
+        );
+
+        const uploadedImageUrl = cloudinaryResponse.data.secure_url;
+        console.log("Uploaded Image URL:", uploadedImageUrl);
+
+        // Step 3: Send the public URL to the Netlify Function
+        const response = await fetch("/.netlify/functions/sendPhotos", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            imageUrl: uploadedPhoto, // Assuming this is a base64 string
-            styleImageUrl: 'https://example.com/your-style-image.jpg', // Replace with actual style image URL if needed
-            textPrompt: 'YourInputPrompt', // Replace with actual prompt if needed
+            imageUrl: uploadedImageUrl, // Public URL from Cloudinary
+            styleImageUrl: "https://example.com/your-style-image.jpg", // Replace with actual style image URL
+            textPrompt: "Generate a personalized avatar.", // Replace with your prompt
           }),
         });
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to send photo');
+          throw new Error(errorData.error || "Failed to send photo");
         }
 
         const result = await response.json();
@@ -89,9 +118,9 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
         // Assuming the API returns { avatarPhotoUrl: 'url_to_generated_avatar' }
         onPhotoUploadDone(result.avatarPhotoUrl);
       } catch (error) {
-        console.error('Error sending photo:', error);
+        console.error("Error sending photo:", error);
         // Optionally, inform the user about the error
-        alert('Произошла ошибка при отправке фото. Пожалуйста, попробуйте снова.');
+        alert("Произошла ошибка при отправке фото. Пожалуйста, попробуйте снова.");
         // Optionally, allow the user to retry
       }
     }
@@ -214,10 +243,10 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
               &times;
             </button>
 
-            {uploadedPhoto && (
+            {previewUrl && (
               <div className="text-center mb-6">
                 <img
-                  src={uploadedPhoto}
+                  src={previewUrl}
                   alt="Uploaded"
                   className="w-full h-auto rounded-lg"
                 />
