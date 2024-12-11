@@ -65,7 +65,7 @@ const AvatarStartPage = () => {
   };
 
   return (
-    <div className="bg-white subtle-border mb-5 z-10 shadow-lg rounded-lg p-4 sm:p-6 w-full min-w-[300px] mx-auto">
+    <div className="bg-transparent subtle-border mb-5 z-10 shadow-lg rounded-lg p-4 sm:p-6 w-full min-w-[300px] mx-auto">
       {/* Hidden file input */}
       <input
         ref={fileInputRef}
