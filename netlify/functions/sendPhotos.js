@@ -1,19 +1,19 @@
 // netlify/functions/sendPhoto.js
 
-const fetch = require('node-fetch'); // Ensure node-fetch is installed
+const fetch = require('node-fetch');
 
 exports.handler = async (event, context) => {
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      body: 'Method Not Allowed',
+      body: JSON.stringify({ error: 'Method Not Allowed' }),
     };
   }
 
   try {
     const { imageUrl, styleImageUrl, textPrompt } = JSON.parse(event.body);
 
-    const apiKey = process.env.LIGHTX_API_KEY; // Securely store your API key
+    const apiKey = process.env.LIGHTX_API_KEY; // Ensure this is set in Netlify
 
     const apiUrl = 'https://api.lightxeditor.com/external/api/v1/avatar';
 
