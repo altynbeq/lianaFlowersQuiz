@@ -66,14 +66,33 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
 
     if (uploadedPhoto && onPhotoUploadDone) {
       try {
-        // Call the API to get the avatarPhotoUrl
-        const avatarPhotoUrl = await sendPhoto(uploadedPhoto);
-        // Pass the URL up to the parent via callback
-        onPhotoUploadDone(avatarPhotoUrl);
+        // Send the photo to the Netlify Function
+        const response = await fetch('/.netlify/functions/sendPhoto', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            imageUrl: uploadedPhoto, // Assuming this is a base64 string
+            styleImageUrl: 'https://example.com/your-style-image.jpg', // Replace with actual style image URL if needed
+            textPrompt: 'YourInputPrompt', // Replace with actual prompt if needed
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to send photo');
+        }
+
+        const result = await response.json();
+
+        // Assuming the API returns { avatarPhotoUrl: 'url_to_generated_avatar' }
+        onPhotoUploadDone(result.avatarPhotoUrl);
       } catch (error) {
-        console.error("Error sending photo:", error);
-        // Handle errors if needed
-        onPhotoUploadDone(null); // pass null or handle accordingly
+        console.error('Error sending photo:', error);
+        // Optionally, inform the user about the error
+        alert('Произошла ошибка при отправке фото. Пожалуйста, попробуйте снова.');
+        // Optionally, allow the user to retry
       }
     }
   };

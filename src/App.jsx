@@ -1,3 +1,5 @@
+// src/App.js
+
 import React, { useState } from "react";
 import { FlowerPersonalityQuiz } from "./components/FlowerPersonalityQuiz";
 import BlossomScene from "./components/ui/flowersFall/FlowersFall";
@@ -8,23 +10,24 @@ const App = () => {
   const [gender, setGender] = useState(false);
   const [avatarFinished, setAvatarFinished] = useState(false);
   const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
-  const [avatarPhotoUrl, setAvatarPhotoUrl] = useState(null); // Store the photo URL here
+  const [avatarPhotoUrl, setAvatarPhotoUrl] = useState(null); // New state to store the avatar photo URL
 
   const handleGenderSelect = (selectedGender) => {
     setGender(selectedGender);
   };
 
   const handlePhotoUploadDone = (photoUrl) => {
-    // photoUrl is what we got from sendPhoto
-    // Store it in state
-    setAvatarPhotoUrl(photoUrl);
-
-    // Display the "Photo sent" modal
-    setIsPhotoUploaded(true);
+    if (photoUrl) {
+      setAvatarPhotoUrl(photoUrl);
+      setIsPhotoUploaded(true);
+    } else {
+      // Handle the case where photoUrl is null or undefined
+      alert('Не удалось получить аватар. Пожалуйста, попробуйте снова.');
+    }
   };
 
   const closePhotoUploadedModal = () => {
-    // After acknowledging, start the quiz
+    // After acknowledging the "photo was sent" modal, we set avatarFinished = true
     setAvatarFinished(true);
     setIsPhotoUploaded(false);
   };
@@ -49,6 +52,7 @@ const App = () => {
         )}
       </div>
 
+      {/* Modal to show that photo was sent and now user must answer questions */}
       {isPhotoUploaded && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex items-center justify-center">
           <div className="bg-white rounded-lg p-6 w-11/12 sm:w-96 relative">

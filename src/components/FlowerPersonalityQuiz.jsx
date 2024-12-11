@@ -1,3 +1,5 @@
+// src/components/FlowerPersonalityQuiz.js
+
 import React, { useState } from "react";
 import { FaArrowLeft, FaRedoAlt } from "react-icons/fa";
 import logo from "../assets/logo.svg"; // Import your company logo
@@ -7,7 +9,7 @@ const fontFamily = "font-[Comfortaa]";
 
 // Components
 const Card = ({ children, className }) => (
-  <div className={`rounded-lg p-4 bg-transparent  ${className}`}>{children}</div>
+  <div className={`rounded-lg p-4 bg-white ${className}`}>{children}</div>
 );
 
 const CardHeader = ({ children, className }) => (
@@ -30,15 +32,15 @@ const Button = ({ children, onClick, className, disabled, gender }) => {
   const getButtonStyles = (gender) => {
     if (gender === "male") {
       return {
-        // bgColor: "bg-stone-300",
-        // hoverColor: "hover:bg-stone-600",
+        bgColor: "bg-stone-300",
+        hoverColor: "hover:bg-stone-600",
         textColor: "text-black",
       };
     }
     // Default to female styles
     return {
-      // bgColor: "bg-stone-300",
-      // hoverColor: "hover:bg-stone-600",
+      bgColor: "bg-stone-300",
+      hoverColor: "hover:bg-stone-600",
       textColor: "text-black",
     };
   };
@@ -209,7 +211,7 @@ const personalityInterpretations = {
   },
 };
 
-export const FlowerPersonalityQuiz = ({ gender }) => {
+export const FlowerPersonalityQuiz = ({ gender, avatarPhotoUrl }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [showResult, setShowResult] = useState(false);
@@ -276,54 +278,54 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
 
   return showResult ? (
     <div className={`flex flex-col min-h-screen items-center justify-center ${fontFamily}`}>
-    {/* Company Logo: Larger Size */}
-    <div className="flex justify-center mb-4">
-      <img src={logo} alt="Company Logo" className="h-40 w-48" />
-    </div>
-
-    <Card className={`w-full max-w-md shadow-2xl border-2 ${genderStyles.borderColor}`}>
-      <CardHeader
-        className={`bg-gradient-to-r justify-center text-center flex rounded-2xl ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo}`}
-      >
-        <CardTitle className="text-xl font-bold text-black">
-          {determinePersonality(gender).title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-6 bg-white">
-        {/* Display the avatar photo if available */}
-        {avatarPhotoUrl && (
-          <div className="flex justify-center mb-4">
-            <img
-              src={avatarPhotoUrl}
-              alt="Generated Avatar"
-              className="w-32 h-32 object-cover rounded-full shadow-lg"
-            />
-          </div>
-        )}
-
-        <p className="text-lg text-gray-700 mb-4 leading-relaxed">
-          {determinePersonality(gender).description}
-        </p>
-      </CardContent>
-      <CardFooter className="p-4">
-        <Button
-          onClick={resetQuiz}
-          className={`w-full flex items-center justify-center bg-stone-300 text-black`}
-          gender={gender}
-        >
-          <FaRedoAlt className="mr-2" /> Пройти квиз снова
-        </Button>
-      </CardFooter>
-    </Card>
-  </div>
-  ) : (
-    <div className={`flex flex-col items-center justify-center bg-transparent  ${fontFamily}`}>
       {/* Company Logo: Larger Size */}
-      <div className="flex justify-center ">
-        <img src={logo} alt="Company Logo" className="h-40 w-40" />
+      <div className="flex justify-center mb-4">
+        <img src={logo} alt="Company Logo" className="h-40 w-48" />
       </div>
 
-      <Card className={`w-full max-w-md shadow-lg `}>
+      <Card className={`w-full max-w-md shadow-2xl border-2 ${genderStyles.borderColor}`}>
+        <CardHeader
+          className={`bg-gradient-to-r justify-center text-center flex p-1 rounded-2xl ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo}`}
+        >
+          <CardTitle className="text-xl font-bold text-black">
+            {determinePersonality(gender).title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6 bg-white">
+          {/* Display the avatar photo if available */}
+          {avatarPhotoUrl && (
+            <div className="flex justify-center mb-4">
+              <img
+                src={avatarPhotoUrl}
+                alt="Generated Avatar"
+                className="w-32 h-32 object-cover rounded-full shadow-lg"
+              />
+            </div>
+          )}
+
+          <p className="text-lg text-gray-700 mb-4 leading-relaxed">
+            {determinePersonality(gender).description}
+          </p>
+        </CardContent>
+        <CardFooter className="p-4">
+          <Button
+            onClick={resetQuiz}
+            className={`w-full flex items-center justify-center bg-stone-300 text-black`}
+            gender={gender}
+          >
+            <FaRedoAlt className="mr-2" /> Пройти квиз снова
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  ) : (
+    <div className={`flex flex-col items-center justify-center min-h-screen ${fontFamily}`}>
+      {/* Company Logo: Larger Size */}
+      <div className="flex justify-center mb-4">
+        <img src={logo} alt="Company Logo" className="h-40 w-48" />
+      </div>
+
+      <Card className={`w-full max-w-md shadow-lg`}>
         {/* Progress Bar */}
         <div className="flex items-center justify-between mb-4">
           {questions[gender].map((_, index) => (
@@ -343,7 +345,7 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
 
         {/* Quiz Header */}
         <CardHeader
-          className={`bg-gradient-to-r p-2 rounded-2xl ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo} text-center`}
+          className={`bg-gradient-to-r rounded-2xl ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo} text-center`}
         >
           <CardTitle className="text-xl font-bold text-gray-800">
             Квиз: Ваша личность — цветок
@@ -351,8 +353,8 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
         </CardHeader>
 
         {/* Quiz Content */}
-        <CardContent className={`p-4 bg-transparent `}>
-          <div className="">
+        <CardContent className={`p-4 ${genderStyles.answerBoxBg}`}>
+          <div className="mb-4">
             <p className="text-lg font-semibold mb-6 text-gray-800 text-center">
               {currentQuizQuestion.question}
             </p>
@@ -371,10 +373,10 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
             <Button
               onClick={handlePreviousQuestion}
               disabled={currentQuestion === 0}
-              className="flex items-center justify-center px-4 py-2 bg-stone-300 text-black "
+              className="flex items-center justify-center px-4 py-2 text-black"
               gender={gender}
             >
-              <FaArrowLeft className="mr-2 " /> Назад
+              <FaArrowLeft className="mr-2" /> Назад
             </Button>
           </div>
         </CardContent>
@@ -382,3 +384,6 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
     </div>
   );
 };
+
+
+
