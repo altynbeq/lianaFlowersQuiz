@@ -81,7 +81,7 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
 
         // Step 2: Upload the image to Cloudinary
         const cloudName = 'dzzldqqsc'; // Should be 'dzzldqqsc'
-        const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET; // Should be 'unsigned_preset'
+        const uploadPreset = 'user_photos'; // Should be 'unsigned_preset'
 
         const formData = new FormData();
         formData.append('file', compressedFile);
