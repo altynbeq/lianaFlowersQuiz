@@ -67,7 +67,7 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
     if (uploadedPhoto && onPhotoUploadDone) {
       try {
         // Send the photo to the Netlify Function
-        const response = await fetch('/.netlify/functions/sendPhoto', {
+        const response = await fetch('/.netlify/functions/sendPhotos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
