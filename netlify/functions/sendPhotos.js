@@ -12,9 +12,10 @@ exports.handler = async (event, context) => {
 
   try {
     const { imageUrl, styleImageUrl, textPrompt } = JSON.parse(event.body);
-
     const apiKey = process.env.LIGHTX_API_KEY; // Ensure this is set in Netlify
-
+    
+    console.log("API_Key",apiKey);
+    console.log("imageUrl", imageUrl)
     const apiUrl = 'https://api.lightxeditor.com/external/api/v1/avatar';
 
     const data = {
