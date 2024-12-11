@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { FaArrowLeft, FaRedoAlt } from "react-icons/fa";
+import logo from "../assets/logo.svg"; // Import your company logo
 
 // Common styles
 const fontFamily = "font-[Comfortaa]";
 
 // Components
 const Card = ({ children, className }) => (
-  <div className={`rounded-lg  p-4 bg-white ${className}`}>{children}</div>
+  <div className={`rounded-lg p-4 bg-transparent  ${className}`}>{children}</div>
 );
 
 const CardHeader = ({ children, className }) => (
@@ -29,15 +30,15 @@ const Button = ({ children, onClick, className, disabled, gender }) => {
   const getButtonStyles = (gender) => {
     if (gender === "male") {
       return {
-        bgColor: "bg-blue-500",
-        hoverColor: "hover:bg-blue-600",
+        // bgColor: "bg-stone-300",
+        // hoverColor: "hover:bg-stone-600",
         textColor: "text-black",
       };
     }
     // Default to female styles
     return {
-      bgColor: "bg-pink-300",
-      hoverColor: "hover:bg-pink-600",
+      // bgColor: "bg-stone-300",
+      // hoverColor: "hover:bg-stone-600",
       textColor: "text-black",
     };
   };
@@ -46,17 +47,17 @@ const Button = ({ children, onClick, className, disabled, gender }) => {
 
   return (
     <button
-  onClick={onClick}
-  disabled={disabled}
-  className={`px-4 py-2 rounded-lg text-black bg-white font-medium transition-all duration-300 
-    ${disabled
-      ? "bg-gray-300 cursor-not-allowed"
-      : `hover:scale-105 hover:shadow-lg ${styles.textColor}`
-    } 
-    ${className}`}
->
-  {children}
-</button>
+      onClick={onClick}
+      disabled={disabled}
+      className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 
+        ${disabled
+          ? "bg-gray-300 cursor-not-allowed"
+          : `${styles.bgColor} ${styles.hoverColor} hover:scale-105 hover:shadow-lg ${styles.textColor}`
+        } 
+        ${className}`}
+    >
+      {children}
+    </button>
   );
 };
 
@@ -66,36 +67,36 @@ const questions = {
     {
       question: "У вас сильная Харизма, с каким цветком вы себя ассоциировали?",
       options: [
-        "Алой розой — символизирует страсть, силу и привлекает внимание своей яркостью и магнетизмом.",
-        "Черной орхидеей — олицетворяет загадочность, элегантность и уникальность, притягивая взгляды своей необычностью.",
+        "Алой розой — символизирует страсть, силу и яркость.",
+        "Черной орхидеей — олицетворяет загадочность и уникальность.",
       ],
     },
     {
       question: "Вы — ladyboss, с каким цветком вы себя ассоциировали?",
       options: [
-        "Чёрной розой — символизирует силу, уверенность и непокорность, подчеркивая вашу власть и решимость.",
-        "Алой орхидеей — олицетворяет элегантность, страсть и способность вдохновлять, при этом сохраняя независимость и лидерство.",
+        "Чёрной розой — символизирует силу и уверенность.",
+        "Алой орхидеей — олицетворяет элегантность и лидерство.",
       ],
     },
     {
-      question: "⁠Вы — очень чувственная, с каким цветком вы себя олицетворяете?",
+      question: "Вы — очень чувственная, с каким цветком вы себя олицетворяете?",
       options: [
-        "Красной розой — символизирует страсть, эмоции и глубокие чувства, олицетворяя вашу интенсивность и искренность.",
-        "Пурпурной орхидеей — ассоциируется с тайной, соблазнительностью и изысканной красотой, отражая вашу чувственность и утонченность.",
+        "Красной розой — символизирует страсть и глубокие чувства.",
+        "Пурпурной орхидеей — отражает тайну и утонченность.",
       ],
     },
     {
       question: "Вы — нежная натура, с каким цветком вы себя олицетворяете?",
       options: [
-        "Белой лилией — символизирует чистоту, изысканность и утонченную красоту, олицетворяя вашу мягкость и невинность.",
-        "Розовой пионой — олицетворяет нежность, элегантность и душевную теплоту, отражая вашу заботливость и мягкость.",
+        "Белой лилией — символ чистоты и изысканности.",
+        "Розовой пионой — олицетворяет нежность и душевную теплоту.",
       ],
     },
     {
       question: "Вы — очень милосердная, с каким цветком вы себя олицетворяете?",
       options: [
-        "Белой розой — символизирует чистоту, доброту и сострадание, отражая вашу искреннюю заботу о других.",
-        "Пион — олицетворяет спокойствие, исцеление и гармонию, подчеркивая вашу способность приносить утешение и поддержку.",
+        "Белой розой — чистота, доброта и сострадание.",
+        "Пион — символизирует спокойствие, исцеление и гармонию.",
       ],
     },
   ],
@@ -110,36 +111,36 @@ const questions = {
     {
       question: "Вы обладаете внутренней гармонией, на языке цветов, вы были бы?",
       options: [
-        "Лавандой — олицетворяет вечность, спокойствие и покой.",
-        "Пионом — символизирует богатство, храбрость и честь.",
+        "Лавандой — спокойствие и умиротворение.",
+        "Пионом — богатство, храбрость и честь.",
       ],
     },
     {
       question: "Вы — лидер по натуре, каким бы цветком вы себя олицетворяли?",
       options: [
-        "Красной розой — символизирует страсть, силу и решительность.",
-        "Чёрной орхидеей — олицетворяет загадочность, стойкость и независимость, что присуще уверенным и сильным лидерам.",
+        "Красной розой — страсть, сила и решительность.",
+        "Чёрной орхидеей — загадочность и независимость.",
       ],
     },
     {
       question: "Вы — очень яркая личность, каким бы цветком вы себя олицетворяли?",
       options: [
-        "Алой розой — символизирует страсть, энергичность и силу.",
-        "Оранжевым тюльпаном — олицетворяет радость, креативность и оптимизм, всегда излучая тепло и энтузиазм.",
+        "Алой розой — энергичность и сила.",
+        "Оранжевым тюльпаном — радость, креативность и оптимизм.",
       ],
     },
     {
       question: "Вы — очень добрый человек, каким бы цветком вы себя олицетворяли?",
       options: [
-        "Белой лилией — символизирует чистоту, доброту и мир.",
-        "Лавандой — ассоциируется с мягкостью, спокойствием и умиротворением.",
+        "Белой лилией — доброта и мир.",
+        "Лавандой — мягкость и умиротворение.",
       ],
     },
     {
       question: "Вы — очень порядочный человек, каким бы цветком вы себя олицетворяли?",
       options: [
-        "Белой розой — символизирует честность, чистоту и порядочность, отражая стремление к справедливости и достоинству.",
-        "Тюльпаном — ассоциируется с искренностью, прямолинейностью и надежностью, всегда стоя на страже своих ценностей.",
+        "Белой розой — честность и чистота.",
+        "Тюльпаном — искренность и надежность.",
       ],
     },
   ],
@@ -151,63 +152,62 @@ const personalityInterpretations = {
     charisma: {
       title: "Харизматичная Личность 🌹",
       description:
-        "Вы — харизматичная личность с яркой энергетикой, которая привлекает внимание и вдохновляет окружающих.",
+        "Вы — харизматичная личность, излучающая яркую энергетику и вдохновляющая окружающих.",
     },
     ladyboss: {
       title: "LadyBoss 🌺",
       description:
-        "Вы — лидер и вдохновитель. Ваши качества — сила, уверенность и умение руководить с грацией и страстью.",
+        "Вы — лидер и вдохновитель. Ваши качества — уверенность и умение руководить с грацией.",
     },
     sensual: {
       title: "Чувственная Душа 🌸",
       description:
-        "Вы — чувственная и утончённая личность, которая излучает тепло, эмоции и элегантность.",
+        "Вы — чувственная и утончённая личность, излучающая тепло и эмоции.",
     },
     gentle: {
       title: "Нежная Натура 💮",
       description:
-        "Вы — утончённая и заботливая личность, которая излучает спокойствие, доброту и мягкость.",
+        "Вы — заботливая и мягкая душа, наполненная добротой и спокойствием.",
     },
     merciful: {
       title: "Милосердное Сердце 🤍",
       description:
-        "Вы — человек с большим сердцем, который стремится помогать другим, даря утешение и поддержку.",
+        "Вы — человек с большим сердцем, стремящийся помочь и поддержать.",
     },
   },
   male: {
     charisma: {
       title: "Харизматичный Лидер 💼",
       description:
-        "Вы — прирождённый лидер с харизмой, которая вдохновляет окружающих и побуждает их следовать за вами.",
+        "Вы — прирождённый лидер с харизмой, вдохновляющий окружающих на действие.",
     },
     leader: {
       title: "Уверенный Лидер 💪",
       description:
-        "Вы — человек, который способен принимать решения с уверенностью, сочетая силу и проницательность.",
+        "Вы — принимаете решения с уверенностью и проницательностью.",
     },
     harmony: {
       title: "Гармоничная Личность 🧘",
       description:
-        "Вы — человек, который ценит внутреннюю гармонию и баланс, создавая вокруг себя спокойствие и уют.",
+        "Вы — ценитель баланса и внутреннего покоя, создающий вокруг себя уют.",
     },
     vibrant: {
       title: "Яркая Личность 🔥",
       description:
-        "Вы — энергичный и страстный человек, который излучает силу и позитив, вдохновляя окружающих.",
+        "Вы — энергичный, страстный человек, излучающий позитивную силу.",
     },
     kind: {
       title: "Добрая Душа 🌱",
       description:
-        "Вы — человек с тёплым сердцем, готовый поддерживать и помогать, излучая доброту и мир.",
+        "Вы — человек с тёплым сердцем, готовый поддержать и помочь другим.",
     },
     honorable: {
       title: "Порядочный Человек 🛡️",
       description:
-        "Вы — человек, который ценит честность, справедливость и достоинство, оставаясь верным своим принципам.",
+        "Вы — ценитель честности и справедливости, преданный своим принципам.",
     },
   },
 };
-
 
 export const FlowerPersonalityQuiz = ({ gender }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -239,24 +239,24 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
   };
 
   const determinePersonality = (gender) => {
-    const traits = Object.keys(personalityInterpretations[gender]); // Get traits for the selected gender
-    const randomTrait = traits[Math.floor(Math.random() * traits.length)]; // Pick a random trait
-    return personalityInterpretations[gender][randomTrait]; // Return the corresponding interpretation
+    const traits = Object.keys(personalityInterpretations[gender]);
+    const randomTrait = traits[Math.floor(Math.random() * traits.length)];
+    return personalityInterpretations[gender][randomTrait];
   };
-  
 
   const currentQuizQuestion = questions[gender][currentQuestion];
+  
   const getGenderStyles = (gender) => {
     if (gender === "male") {
       return {
-        gradientFrom: "from-blue-100",
-        gradientTo: "to-green-100",
-        borderColor: "border-blue-200",
-        headerGradientFrom: "from-blue-200",
-        headerGradientTo: "to-green-200",
-        buttonHoverFrom: "hover:from-blue-600",
-        buttonHoverTo: "hover:to-green-600",
-        // answerBoxBg: "bg-blue-500", // Background for answer boxes
+        gradientFrom: "from-stone-100",
+        gradientTo: "to-neutral-100",
+        borderColor: "border-stone-200",
+        headerGradientFrom: "from-stone-200",
+        headerGradientTo: "to-neutral-200",
+        buttonHoverFrom: "hover:from-stone-600",
+        buttonHoverTo: "hover:to-neutral-600",
+        answerBoxBg: "bg-stone-50",
       };
     }
     // Default to female styles
@@ -268,39 +268,63 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
       headerGradientTo: "to-purple-200",
       buttonHoverFrom: "hover:from-pink-600",
       buttonHoverTo: "hover:to-purple-600",
-      // answerBoxBg: "bg-pink-50", // Background for answer boxes
+      answerBoxBg: "bg-pink-50",
     };
   };
-  
+
   const genderStyles = getGenderStyles(gender);
+
   return showResult ? (
-    <div
-      className={` flex items-center justify-center  ${fontFamily}`}
-    >
-      <Card className={`w-full max-w-md shadow-2xl border-2 ${genderStyles.borderColor}`}>
-        <CardHeader className={`bg-gradient-to-r justify-center text-center flex p-1 rounded-2xl ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo} text-center`}>
-          <CardTitle className="text-1xl  font-bold text-black">
-            {determinePersonality(gender).title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-6 bg-white">
-          <p className="text-1xl text-gray-700 mb-4 leading-relaxed">
-            {determinePersonality(gender).description}
-          </p>
-        </CardContent>
-        <CardFooter className="p-4">
-          <Button
-            onClick={resetQuiz}
-            className={`w-full flex items-center justify-center bg-gradient-to-r ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo} ${genderStyles.buttonHoverFrom} ${genderStyles.buttonHoverTo} text-black`}
-          >
-            <FaRedoAlt className="mr-2" /> Пройти квиз снова
-          </Button>
-        </CardFooter>
-      </Card>
+    <div className={`flex flex-col min-h-screen items-center justify-center ${fontFamily}`}>
+    {/* Company Logo: Larger Size */}
+    <div className="flex justify-center mb-4">
+      <img src={logo} alt="Company Logo" className="h-40 w-48" />
     </div>
+
+    <Card className={`w-full max-w-md shadow-2xl border-2 ${genderStyles.borderColor}`}>
+      <CardHeader
+        className={`bg-gradient-to-r justify-center text-center flex rounded-2xl ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo}`}
+      >
+        <CardTitle className="text-xl font-bold text-black">
+          {determinePersonality(gender).title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-6 bg-white">
+        {/* Display the avatar photo if available */}
+        {avatarPhotoUrl && (
+          <div className="flex justify-center mb-4">
+            <img
+              src={avatarPhotoUrl}
+              alt="Generated Avatar"
+              className="w-32 h-32 object-cover rounded-full shadow-lg"
+            />
+          </div>
+        )}
+
+        <p className="text-lg text-gray-700 mb-4 leading-relaxed">
+          {determinePersonality(gender).description}
+        </p>
+      </CardContent>
+      <CardFooter className="p-4">
+        <Button
+          onClick={resetQuiz}
+          className={`w-full flex items-center justify-center bg-stone-300 text-black`}
+          gender={gender}
+        >
+          <FaRedoAlt className="mr-2" /> Пройти квиз снова
+        </Button>
+      </CardFooter>
+    </Card>
+  </div>
   ) : (
-    <div className={`flex items-center  justify-center  ${fontFamily}`}>
-      <Card className={`w-full max-w-md `}>
+    <div className={`flex flex-col items-center justify-center bg-transparent  ${fontFamily}`}>
+      {/* Company Logo: Larger Size */}
+      <div className="flex justify-center ">
+        <img src={logo} alt="Company Logo" className="h-40 w-40" />
+      </div>
+
+      <Card className={`w-full max-w-md shadow-lg `}>
+        {/* Progress Bar */}
         <div className="flex items-center justify-between mb-4">
           {questions[gender].map((_, index) => (
             <div
@@ -316,36 +340,41 @@ export const FlowerPersonalityQuiz = ({ gender }) => {
             ></div>
           ))}
         </div>
-  
-        <CardHeader className={`bg-gradient-to-r rounded-2xl ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo} text-center`}>
-          <CardTitle className="text-1xl font-bold text-gray-800">
+
+        {/* Quiz Header */}
+        <CardHeader
+          className={`bg-gradient-to-r p-2 rounded-2xl ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo} text-center`}
+        >
+          <CardTitle className="text-xl font-bold text-gray-800">
             Квиз: Ваша личность — цветок
           </CardTitle>
         </CardHeader>
-  
-        <CardContent className={` ${genderStyles.answerBoxBg}`}>
-          <div className="mb-4 bg-white">
-            <p className="text-1xl font-semibold mb-6 text-gray-800 text-center">
+
+        {/* Quiz Content */}
+        <CardContent className={`p-4 bg-transparent `}>
+          <div className="">
+            <p className="text-lg font-semibold mb-6 text-gray-800 text-center">
               {currentQuizQuestion.question}
             </p>
-            {currentQuizQuestion.options.map((option) => (
-            <Button
-              key={option}
-              onClick={() => handleAnswerSelect(option)}
-              gender={gender}
-              className={`w-full mb-4 text-left text-black whitespace-normal border-2 bg-white  hover:${genderStyles.gradientFrom} transition-all duration-300 text-md`}
-            >
-              {option}
-            </Button>
-          ))}
+            {currentQuizQuestion.options.map((option, index) => (
+              <Button
+                key={index}
+                onClick={() => handleAnswerSelect(option)}
+                gender={gender}
+                className="w-full mb-4 text-left text-black whitespace-normal border-2 transition-all duration-300 text-md"
+              >
+                {option}
+              </Button>
+            ))}
           </div>
           <div className="flex justify-center mt-4">
             <Button
               onClick={handlePreviousQuestion}
               disabled={currentQuestion === 0}
-              className={`flex items-center justify-center bg-gradient-to-r ${genderStyles.headerGradientFrom} ${genderStyles.headerGradientTo} ${genderStyles.buttonHoverFrom} ${genderStyles.buttonHoverTo} text-black`}
+              className="flex items-center justify-center px-4 py-2 bg-stone-300 text-black "
+              gender={gender}
             >
-              <FaArrowLeft className="mr-2" /> Назад
+              <FaArrowLeft className="mr-2 " /> Назад
             </Button>
           </div>
         </CardContent>

@@ -5,11 +5,12 @@ import three from "../assets/avatars/3.jpg";
 import four from "../assets/avatars/4.webp";
 import five from "../assets/avatars/5.jpg";
 import six from "../assets/avatars/6.webp";
-import logo from "../assets/logo.svg"; // Import your company logo
+import logo from "../assets/logo.svg";
+import { sendPhoto } from "../functions/sendPhoto";
 
 const avatarImages = [one, two, three, four, five, six];
 
-const AvatarStartPage = () => {
+const AvatarStartPage = ({ onPhotoUploadDone }) => {
   const [images, setImages] = useState(Array(6).fill(null));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
@@ -17,7 +18,6 @@ const AvatarStartPage = () => {
   const fileInputRef = useRef(null);
 
   const openInitialModal = () => {
-    // Clear all states to start fresh
     setIsModalOpen(true);
     setIsPhotoModalOpen(false);
     setUploadedPhoto(null);
@@ -37,7 +37,6 @@ const AvatarStartPage = () => {
   };
 
   const openFileDialog = () => {
-    // Clear the file input value so selecting the same file again triggers onChange
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -51,17 +50,32 @@ const AvatarStartPage = () => {
     const reader = new FileReader();
     reader.onloadend = () => {
       setUploadedPhoto(reader.result);
-      openPhotoModal(); // Ensure the photo modal always opens after upload
+      openPhotoModal();
     };
     reader.readAsDataURL(file);
   };
 
   const deletePhoto = () => {
-    // Delete photo and immediately prompt for another photo
     setUploadedPhoto(null);
     setIsPhotoModalOpen(false);
-    // Reopen the file dialog so the user can retake the photo right away
     openFileDialog();
+  };
+
+  const handleDoneClick = async () => {
+    closePhotoModal();
+
+    if (uploadedPhoto && onPhotoUploadDone) {
+      try {
+        // Call the API to get the avatarPhotoUrl
+        const avatarPhotoUrl = await sendPhoto(uploadedPhoto);
+        // Pass the URL up to the parent via callback
+        onPhotoUploadDone(avatarPhotoUrl);
+      } catch (error) {
+        console.error("Error sending photo:", error);
+        // Handle errors if needed
+        onPhotoUploadDone(null); // pass null or handle accordingly
+      }
+    }
   };
 
   return (
@@ -146,10 +160,10 @@ const AvatarStartPage = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center">
           <div className="bg-white rounded-lg p-6 w-11/12 sm:w-96 relative">
-            {/* Close Icon */}
+            {/* Close Icon (Bigger) */}
             <button
               onClick={closeInitialModal}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-3xl"
             >
               &times;
             </button>
@@ -162,7 +176,7 @@ const AvatarStartPage = () => {
                 onClick={openFileDialog}
                 className="px-6 py-3 bg-blue-500 text-white rounded-full font-bold hover:bg-blue-600 transition-all"
               >
-                Let's Go
+                Поехали
               </button>
             </div>
           </div>
@@ -173,10 +187,10 @@ const AvatarStartPage = () => {
       {isPhotoModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center">
           <div className="bg-white rounded-lg p-6 w-11/12 sm:w-96 relative">
-            {/* Close Icon */}
+            {/* Close Icon (Bigger) */}
             <button
               onClick={closePhotoModal}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-3xl"
             >
               &times;
             </button>
@@ -190,18 +204,18 @@ const AvatarStartPage = () => {
                 />
               </div>
             )}
-            <div className="flex justify-between mt-6">
+            <div className="flex justify-between mt-6 space-x-2">
               <button
                 onClick={deletePhoto}
                 className="px-6 py-3 bg-red-500 text-white rounded-full font-bold hover:bg-red-600 transition-all"
               >
-                Delete & Retake
+                Удалить и переснять
               </button>
               <button
-                onClick={closePhotoModal}
+                onClick={handleDoneClick}
                 className="px-6 py-3 bg-blue-500 text-white rounded-full font-bold hover:bg-blue-600 transition-all"
               >
-                Done
+                Готово
               </button>
             </div>
           </div>

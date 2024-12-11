@@ -50,10 +50,10 @@ const BlossomScene: React.FC = () => {
         this.container = container;
         this.placeholder = document.createElement('div');
         this.petals = [];
-        this.numPetals = config.numPetals || 100; // Increase petals count
+        this.numPetals = config.numPetals || 75; // Reduced number of petals by 25%
         this.petalsTypes = config.petalsTypes;
-        this.gravity = config.gravity || 0.5; // Adjust gravity for smoother fall
-        this.windMaxSpeed = config.windMaxSpeed || 2; // Reduce wind randomness
+        this.gravity = config.gravity || 0.5;
+        this.windMaxSpeed = config.windMaxSpeed || 2;
         this.windMagnitude = 0.2;
         this.windDuration = 0;
         this.width = this.container.offsetWidth;
@@ -70,22 +70,21 @@ const BlossomScene: React.FC = () => {
       }
 
       resetPetal(petal: Petal) {
-        petal.x = Math.random() * this.width; // Spread evenly across the container width
-        petal.y = -Math.random() * this.height; // Randomize initial height
+        petal.x = Math.random() * this.width;
+        petal.y = -Math.random() * this.height;
         petal.z = Math.random() * 200;
-        petal.rotation.speed = Math.random() * 5; // Limit rotation speed
+        petal.rotation.speed = Math.random() * 5;
         petal.rotation.axis = ['X', 'Y', 'Z'][Math.floor(Math.random() * 3)];
         petal.rotation.x = Math.random() * 360 - 180;
-        petal.xSpeedVariation = Math.random() * 0.5 - 0.25; // Narrow variation for consistency
-        petal.ySpeed = 0.5 + Math.random() * this.gravity; // Make falling speed consistent
+        petal.xSpeedVariation = Math.random() * 0.5 - 0.25;
+        petal.ySpeed = 0.5 + Math.random() * this.gravity;
         return petal;
       }
 
       calculateWindSpeed(t: number, y: number) {
         const a = (this.windMagnitude / 2) * ((this.height - y) / this.height);
-        return a * Math.sin((2 * Math.PI * t) / this.windDuration) - a / 2; // Center wind force
+        return a * Math.sin((2 * Math.PI * t) / this.windDuration) - a / 2;
       }
-      
 
       updatePetal(petal: Petal) {
         const petalWindSpeed = this.calculateWindSpeed(this.timer, petal.y);
@@ -99,7 +98,7 @@ const BlossomScene: React.FC = () => {
 
       updateWind() {
         this.windMagnitude = Math.random() * this.windMaxSpeed;
-        this.windDuration = this.windMagnitude * 100 + 100; // Ensure longer, smoother gusts
+        this.windDuration = this.windMagnitude * 100 + 100;
       }
 
       createPetals() {
