@@ -15,7 +15,8 @@ exports.handler = async (event, context) => {
     console.log('Parsing request body...');
     const { imageUrl, styleImageUrl, textPrompt } = JSON.parse(event.body);
     console.log('Parsed body:', { imageUrl, styleImageUrl, textPrompt });
-    debugger
+
+    // Validate required fields
     if (!imageUrl || !styleImageUrl || !textPrompt) {
       console.error('Missing required fields:', { imageUrl, styleImageUrl, textPrompt });
       return {
@@ -64,7 +65,9 @@ exports.handler = async (event, context) => {
     const result = await response.json();
     console.log('External API Response:', result);
 
-    const { orderId } = result.body;
+    // Adjust this based on the actual structure of the first API's response
+    // Assuming orderId is directly under result
+    const { orderId } = result;
     if (!orderId) {
       console.error('orderId not found in the response');
       return {
@@ -73,44 +76,72 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Step 2: Fetch order status using orderId
-    const secondApi = 'https://api.lightxeditor.com/external/api/v1/order-status';
-    console.log('Sending request to order-status API with orderId:', orderId);
+    // Polling parameters
+    const maxRetries = 5;
+    const interval = 3000; // 3 seconds
 
-    const statusResponse = await fetch(secondApi, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-      },
-      body: JSON.stringify({ orderId }), // Send as an object
-    });
+    // Helper function to pause execution for a given duration
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    console.log('Received response from order-status API with status:', statusResponse.status);
+    // Polling loop
+    let retries = 0;
+    let status = '';
+    let output = '';
 
-    if (!statusResponse.ok) {
-      const errorText = await statusResponse.text();
-      console.error('Order Status API Error Response:', errorText);
-      return {
-        statusCode: statusResponse.status,
-        body: JSON.stringify({ error: errorText }),
-      };
+    while (retries < maxRetries) {
+      console.log(`Attempt ${retries + 1} to fetch order status...`);
+
+      const secondApi = 'https://api.lightxeditor.com/external/api/v1/order-status';
+      console.log('Sending request to order-status API with orderId:', orderId);
+
+      const statusResponse = await fetch(secondApi, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+        },
+        body: JSON.stringify({ orderId }), // Send as an object
+      });
+
+      console.log('Received response from order-status API with status:', statusResponse.status);
+
+      if (!statusResponse.ok) {
+        const errorText = await statusResponse.text();
+        console.error('Order Status API Error Response:', errorText);
+        return {
+          statusCode: statusResponse.status,
+          body: JSON.stringify({ error: errorText }),
+        };
+      }
+
+      const statusResult = await statusResponse.json();
+      console.log('Order Status API Response:', statusResult);
+
+      // Adjust based on the actual structure of the order-status API's response
+      const { status: currentStatus, output: currentOutput } = statusResult.body;
+
+      if (currentStatus === 'active' && currentOutput) {
+        console.log('Order is active. Output URL:', currentOutput);
+        output = currentOutput;
+        break; // Exit the loop as we have the desired status
+      } else {
+        console.log(`Order status is "${currentStatus}". Retrying in ${interval / 1000} seconds...`);
+        await sleep(interval); // Wait for the specified interval before retrying
+        retries += 1;
+      }
     }
 
-    const statusResult = await statusResponse.json();
-    console.log('Order Status API Response:', statusResult);
-
-    const { status, output } = statusResult.body;
-    if (status === 'active' && output) {
+    if (output) {
+      // If output is obtained, return it
       return {
         statusCode: 200,
         body: JSON.stringify({ output }),
       };
     } else {
-      console.error(`Order status is not active. Current status: ${status}`);
+      // If max retries reached and status is not active
       return {
         statusCode: 202, // Accepted but not completed
-        body: JSON.stringify({ message: `Order status is ${status}. Please try again later.` }),
+        body: JSON.stringify({ message: 'Order is still processing. Please try again later.' }),
       };
     }
 
