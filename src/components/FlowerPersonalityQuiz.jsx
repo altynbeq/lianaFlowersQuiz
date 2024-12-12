@@ -294,13 +294,27 @@ export const FlowerPersonalityQuiz = ({ gender, avatarPhotoUrl }) => {
         <CardContent className="p-6 bg-white">
           {/* Display the avatar photo if available */}
           {avatarPhotoUrl && (
-            <div className="flex justify-center mb-4">
-              <img
-                src={avatarPhotoUrl}
-                alt="Generated Avatar"
-                className="w-64 h-64 object-cover rounded-2xl shadow-lg"
-              />
-            </div>
+            <>
+              <div className="flex justify-center mb-4">
+                <img
+                  src={avatarPhotoUrl}
+                  alt="Generated Avatar"
+                  className="w-64 h-64 object-cover rounded-2xl shadow-lg"
+                />
+              </div>
+
+              {/* Instagram Button */}
+              <div className="flex justify-center mb-4">
+                <button
+                  onClick={() => window.open('https://www.instagram.com/liana.flowers.uralsk?igsh=MW9hZDR5N2p1NmdycQ%3D%3D&utm_source=qr', '_blank')}
+                  className="flex items-center px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full shadow-lg hover:from-pink-600 hover:to-purple-700 transition-colors duration-300"
+                  aria-label="Share avatar on Instagram"
+                >
+                  <FaInstagram className="mr-2 text-2xl" />
+                  Поделиться в Instagram
+                </button>
+              </div>
+            </>
           )}
 
           <p className="text-lg text-gray-700 mb-4 leading-relaxed">
