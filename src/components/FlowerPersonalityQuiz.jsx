@@ -298,7 +298,7 @@ export const FlowerPersonalityQuiz = ({ gender, avatarPhotoUrl }) => {
               <img
                 src={avatarPhotoUrl}
                 alt="Generated Avatar"
-                className="w-32 h-32 object-cover rounded-full shadow-lg"
+                className="w-64 h-64 object-cover rounded-2xl shadow-lg"
               />
             </div>
           )}

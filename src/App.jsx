@@ -49,7 +49,7 @@ const App = () => {
           )
         ) : (
           <div className="p-6 w-[100%] z-20 relative">
-            <AvatarStartPage onPhotoUploadDone={handlePhotoUploadDone} />
+            <AvatarStartPage onPhotoUploadDone={handlePhotoUploadDone} gender={gender} />
           </div>
         )}
       </div>

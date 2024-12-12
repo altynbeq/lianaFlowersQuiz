@@ -13,13 +13,35 @@ import imageCompression from "browser-image-compression"; // Ensure this is inst
 
 const avatarImages = [one, two, three, four, five, six];
 
-const AvatarStartPage = ({ onPhotoUploadDone }) => {
+const AvatarStartPage = ({ onPhotoUploadDone, gender }) => {
   const [images, setImages] = useState(Array(6).fill(null));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [uploadedPhoto, setUploadedPhoto] = useState(null); // This will be the File object
   const [previewUrl, setPreviewUrl] = useState(null); // For image preview
   const fileInputRef = useRef(null);
+
+  function getRandomAvatarOption(gender) {
+    // Find the object matching the provided gender
+    const genderGroup = avatarOptions.find(option => option.gender.toLowerCase() === gender.toLowerCase());
+  
+    if (!genderGroup) {
+      throw new Error(`No avatar options found for gender: ${gender}`);
+    }
+  
+    const { options } = genderGroup;
+  
+    if (!options || options.length === 0) {
+      throw new Error(`No avatar options available for gender: ${gender}`);
+    }
+  
+    // Generate a random index to select an option
+    const randomIndex = Math.floor(Math.random() * options.length);
+  
+    // Return the selected option
+    return options[randomIndex];
+  }
+
 
   const openInitialModal = () => {
     setIsModalOpen(true);
@@ -59,6 +81,49 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
     openPhotoModal();
   };
 
+  const avatarOptions = [
+    {
+      gender: 'female',
+      options: [
+        {
+          imageUrl: 'https://www.reddit.com/media?url=https%3A%2F%2Fpreview.redd.it%2Fnew-ai-portraits-v0-hml85w4ou7na1.jpg%3Fwidth%3D1024%26format%3Dpjpg%26auto%3Dwebp%26s%3Df6418cb61a9d1e3a3a3e5d4407e492d8faf82c36',
+          description: 'Beautiful woman under the water',
+          textPrompt: 'Create a stunning, animated 3D portrait of a beautiful woman submerged underwater. Emphasize graceful, flowing movements and serene expressions, highlighting her natural beauty and elegance. Incorporate realistic water effects, such as light refractions and gentle waves, to enhance the immersive underwater atmosphere. Use a harmonious color palette with shades of blue and aqua to evoke a sense of tranquility and depth.'
+        },
+        {
+          imageUrl: 'https://www.zmo.ai/wp-content/uploads/2023/11/Snip20230914_263-min.webp',
+          description: 'Beautiful woman in garden with a hat of flowers on her head',
+          textPrompt: 'Design a captivating, animated 3D portrait of a beautiful woman standing in a lush garden. She is wearing a stylish hat adorned with vibrant flowers, adding a touch of elegance and nature-inspired charm. Highlight her graceful posture and serene smile, with soft sunlight filtering through the foliage. Use rich, vivid colors to bring the garden to life, creating a harmonious and enchanting scene.'
+        },
+        {
+          imageUrl: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/89553a83-34ab-4928-aca4-46fea7290629/dfuupe9-85d15fbf-c04e-4212-9f02-a9fd17b2120d.jpg/v1/fill/w_784,h_1020,q_70,strp/ai_portraits_1904005_by_ai_portraits_dfuupe9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTMzMiIsInBhdGgiOiJcL2ZcLzg5NTUzYTgzLTM0YWItNDkyOC1hY2E0LTQ2ZmVhNzI5MDYyOVwvZGZ1dXBlOS04NWQxNWZiZi1jMDRlLTQyMTItOWYwMi1hOWZkMTdiMjEyMGQuanBnIiwid2lkdGgiOiI8PTEwMjQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.-P0peyOIqr6I-gKFEmVnhRzKPl4Da_RPwEIT-98iOgE',
+          description: 'Woman on a beach with an animated style background',
+          textPrompt: 'Generate an animated 3D portrait of a woman on a beach, with a serene ocean backdrop. Capture her relaxed and joyful expression as she enjoys the coastal environment. Incorporate dynamic elements like gentle waves, soft sand textures, and a clear sky to enhance the beach atmosphere. Utilize a vibrant and harmonious color scheme to emphasize the beauty and tranquility of the scene.'
+        }
+      ]
+    },
+    {
+      gender: 'male',
+      options: [
+        {
+          imageUrl: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/89553a83-34ab-4928-aca4-46fea7290629/dfuupe9-85d15fbf-c04e-4212-9f02-a9fd17b2120d.jpg/v1/fill/w_784,h_1020,q_70,strp/ai_portraits_1904005_by_ai_portraits_dfuupe9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTMzMiIsInBhdGgiOiJcL2ZcLzg5NTUzYTgzLTM0YWItNDkyOC1hY2E0LTQ2ZmVhNzI5MDYyOVwvZGZ1dXBlOS04NWQxNWZiZi1jMDRlLTQyMTItOWYwMi1hOWZkMTdiMjEyMGQuanBnIiwid2lkdGgiOiI8PTEwMjQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.-P0peyOIqr6I-gKFEmVnhRzKPl4Da_RPwEIT-98iOgE',
+          description: 'Man in a gardener costume with flowers around him',
+          textPrompt: 'Create an animated 3D portrait of a man dressed in a detailed gardener costume, surrounded by an array of colorful flowers. Highlight his passion for gardening with elements like gloves, a tool belt, and a hat adorned with blossoms. Capture a friendly and approachable expression, emphasizing his connection with nature. Use a lively color palette to bring out the richness of the garden environment, including lush greenery and vibrant floral arrangements.'
+        },
+        {
+          imageUrl: 'https://www.reddit.com/media?url=https%3A%2F%2Fpreview.redd.it%2Fphotorealistic-ai-portraits-v0-qyzovi9dyvl91.png%3Fwidth%3D1080%26crop%3Dsmart%26auto%3Dwebp%26s%3D89994aa9913376b2ae483661a9515b554bb003cc',
+          description: 'Man in a gardener costume with flowers around him',
+          textPrompt: 'Design an animated 3D portrait of a man in a gardener costume, surrounded by an abundance of vibrant flowers. Focus on intricate costume details such as pockets, tools, and a hat with floral accents. Portray a dedicated and cheerful demeanor, reflecting his love for gardening. Incorporate rich textures and a vibrant setting to showcase a flourishing garden in the background, enhancing the overall lively and natural feel.'
+        },
+        {
+          imageUrl: 'https://i.pinimg.com/originals/a4/dd/eb/a4ddeb7cf4b9559188464c21f1e090c0.png',
+          description: 'Man in a warrior costume',
+          textPrompt: 'Generate an animated 3D portrait of a man clad in an impressive warrior costume. Emphasize strong and heroic features, with armor adorned with intricate designs and weaponry that highlights his prowess. Capture a determined and fearless expression, embodying the essence of a seasoned warrior. Use bold and contrasting colors to enhance the armor’s details and create a striking visual impact, set against a dynamic background that complements the warrior theme.'
+        }
+      ]
+    }
+  ];
+  
   const deletePhoto = () => {
     setUploadedPhoto(null);
     setPreviewUrl(null);
@@ -94,7 +159,7 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
 
         const uploadedImageUrl = cloudinaryResponse.data.secure_url;
         console.log("Uploaded Image URL:", uploadedImageUrl);
-
+          const randomStyles = getRandomAvatarOption(gender);
         // Step 3: Send the public URL to the Netlify Function
         const response = await fetch("/.netlify/functions/sendPhotos", {
           method: "POST",
@@ -103,8 +168,8 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
           },
           body: JSON.stringify({
             imageUrl: uploadedImageUrl, // Public URL from Cloudinary
-            styleImageUrl: "https://miro.medium.com/v2/resize:fit:1358/1*jZ9v-2QShwnfCwHlEZCmDw.png", // Replace with actual style image URL
-            textPrompt: "Create a cool, animated 3D portrait of me wearing a sleek, modern suit, depicting me as if I were 10 years older. The portrait should have a sophisticated and professional style, highlighting mature facial features and a confident demeanor with a friendly smile. Ensure the suit is well-fitted with attention to detail, including subtle pinstripes and a patterned tie. Use vibrant yet harmonious colors, focusing on shades of blue and gray to enhance the overall aesthetic. Incorporate a blurred cityscape in the background to suggest a professional environment without distracting from the subject. The animation should be smooth, giving the portrait a lively and dynamic feel while maintaining a polished and refined appearance.", // Replace with your prompt
+            styleImageUrl: randomStyles.imageUrl, // Replace with actual style image URL
+            textPrompt: randomStyles.textPrompt
           }),
         });
 
