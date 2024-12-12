@@ -103,8 +103,8 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
           },
           body: JSON.stringify({
             imageUrl: uploadedImageUrl, // Public URL from Cloudinary
-            styleImageUrl: "https://img.freepik.com/premium-photo/cyberpunk-warrior-man-futuristic-soldier-3d-render-illustration_691560-6125.jpg?w=2000", // Replace with actual style image URL
-            textPrompt: "Generate a personalized avatar.", // Replace with your prompt
+            styleImageUrl: "https://miro.medium.com/v2/resize:fit:1358/1*jZ9v-2QShwnfCwHlEZCmDw.png", // Replace with actual style image URL
+            textPrompt: "Create a cool, animated 3D portrait of me wearing a sleek, modern suit, depicting me as if I were 10 years older. The portrait should have a sophisticated and professional style, highlighting mature facial features and a confident demeanor with a friendly smile. Ensure the suit is well-fitted with attention to detail, including subtle pinstripes and a patterned tie. Use vibrant yet harmonious colors, focusing on shades of blue and gray to enhance the overall aesthetic. Incorporate a blurred cityscape in the background to suggest a professional environment without distracting from the subject. The animation should be smooth, giving the portrait a lively and dynamic feel while maintaining a polished and refined appearance.", // Replace with your prompt
           }),
         });
 
@@ -118,8 +118,8 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
         console.log("PHOTO SUCCESS");
 
         // Assuming the API returns { avatarPhotoUrl: 'url_to_generated_avatar' }
-        console.log("result.avatarPhotoUrl", result.avatarPhotoUrl);
-        onPhotoUploadDone(result.avatarPhotoUrl);
+        console.log("result.avatarPhotoUrl", result.output);
+        onPhotoUploadDone(result.output);
       } catch (error) {
         console.error("Error sending photo:", error);
         // Optionally, inform the user about the error
