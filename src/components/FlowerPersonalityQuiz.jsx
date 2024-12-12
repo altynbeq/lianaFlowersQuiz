@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FaArrowLeft, FaRedoAlt } from "react-icons/fa";
 import logo from "../assets/logo.svg"; // Import your company logo
+import { FaInstagram } from "react-icons/fa";
 
 // Common styles
 const fontFamily = "font-[Comfortaa]";
