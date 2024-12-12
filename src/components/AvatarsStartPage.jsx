@@ -103,7 +103,7 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
           },
           body: JSON.stringify({
             imageUrl: uploadedImageUrl, // Public URL from Cloudinary
-            styleImageUrl: "", // Replace with actual style image URL
+            styleImageUrl: "https://img.freepik.com/premium-photo/cyberpunk-warrior-man-futuristic-soldier-3d-render-illustration_691560-6125.jpg?w=2000", // Replace with actual style image URL
             textPrompt: "Generate a personalized avatar.", // Replace with your prompt
           }),
         });

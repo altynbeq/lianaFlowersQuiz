@@ -15,7 +15,7 @@ exports.handler = async (event, context) => {
     console.log('Parsing request body...');
     const { imageUrl, styleImageUrl, textPrompt } = JSON.parse(event.body);
     console.log('Parsed body:', { imageUrl, styleImageUrl, textPrompt });
-
+    debugger
     if (!imageUrl || !styleImageUrl || !textPrompt) {
       console.error('Missing required fields:', { imageUrl, styleImageUrl, textPrompt });
       return {
