@@ -79,13 +79,13 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
         };
         const compressedFile = await imageCompression(uploadedPhoto, options);
 
-        // Step 2: Upload the image to Cloudinary
-        const cloudName = 'dzzldqqsc'; // Should be 'dzzldqqsc'
-        const uploadPreset = 'user_photos'; // Should be 'unsigned_preset'
+        // Step 2: Upload the image to Cloudinary using environment variables
+        const cloudName = 'dzzldqqsc';
+        const uploadPreset = 'user_photos';
 
         const formData = new FormData();
-        formData.append('file', compressedFile);
-        formData.append('upload_preset', uploadPreset);
+        formData.append("file", compressedFile);
+        formData.append("upload_preset", uploadPreset);
 
         const cloudinaryResponse = await axios.post(
           `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
@@ -114,6 +114,7 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
         }
 
         const result = await response.json();
+        console.log("PHOTO SUCCESS");
 
         // Assuming the API returns { avatarPhotoUrl: 'url_to_generated_avatar' }
         onPhotoUploadDone(result.avatarPhotoUrl);

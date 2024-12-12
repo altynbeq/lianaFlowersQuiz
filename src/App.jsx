@@ -7,7 +7,7 @@ import GenderSelection from "./components/GenderSelection";
 import AvatarStartPage from "./components/AvatarsStartPage";
 
 const App = () => {
-  const [gender, setGender] = useState(false);
+  const [gender, setGender] = useState(null); // Changed initial state to null for clarity
   const [avatarFinished, setAvatarFinished] = useState(false);
   const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
   const [avatarPhotoUrl, setAvatarPhotoUrl] = useState(null); // New state to store the avatar photo URL
@@ -22,12 +22,12 @@ const App = () => {
       setIsPhotoUploaded(true);
     } else {
       // Handle the case where photoUrl is null or undefined
-      alert('Не удалось получить аватар. Пожалуйста, попробуйте снова.');
+      alert("Не удалось получить аватар. Пожалуйста, попробуйте снова.");
     }
   };
 
   const closePhotoUploadedModal = () => {
-    // After acknowledging the "photo was sent" modal, we set avatarFinished = true
+    // After acknowledging the "photo was sent" modal, set avatarFinished to true
     setAvatarFinished(true);
     setIsPhotoUploaded(false);
   };
