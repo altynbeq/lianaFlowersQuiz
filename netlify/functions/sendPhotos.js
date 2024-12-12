@@ -63,36 +63,57 @@ exports.handler = async (event, context) => {
 
     const result = await response.json();
     console.log('External API Response:', result);
-    
+
+    const { orderId } = result;
+    if (!orderId) {
+      console.error('orderId not found in the response');
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: 'orderId not found in the response' }),
+      };
+    }
+
+    // Step 2: Fetch order status using orderId
     const secondApi = 'https://api.lightxeditor.com/external/api/v1/order-status';
-    
-    const finalResponse = await fetch(secondApi, {
+    console.log('Sending request to order-status API with orderId:', orderId);
+
+    const statusResponse = await fetch(secondApi, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
       },
-      body: JSON.stringify(result.orderId),
-    })
-    .then(response => {
-      if (!response.ok) {
-          throw new Error(`Failed to retrieve order status. Status code: ${response.status}, Response: ${response.statusText}`);
-      }
-      console.log("AvatarResponse:", response);
-      return response.json();
-      })
-      .then(data => {
-      console.log("Response:", data);
-      })
-      .catch(error => {
-      console.error("Error:", error.message);
-      });
+      body: JSON.stringify({ orderId }), // Send as an object
+    });
 
-      finalResponse();
-    // return {
-    //   statusCode: 200,
-    //   body: JSON.stringify(result),
-    // };
+    console.log('Received response from order-status API with status:', statusResponse.status);
+
+    if (!statusResponse.ok) {
+      const errorText = await statusResponse.text();
+      console.error('Order Status API Error Response:', errorText);
+      return {
+        statusCode: statusResponse.status,
+        body: JSON.stringify({ error: errorText }),
+      };
+    }
+
+    const statusResult = await statusResponse.json();
+    console.log('Order Status API Response:', statusResult);
+
+    const { status, output } = statusResult.body;
+    if (status === 'active' && output) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ output }),
+      };
+    } else {
+      console.error(`Order status is not active. Current status: ${status}`);
+      return {
+        statusCode: 202, // Accepted but not completed
+        body: JSON.stringify({ message: `Order status is ${status}. Please try again later.` }),
+      };
+    }
+
   } catch (error) {
     console.error('Error in sendPhotos function:', error);
     return {
