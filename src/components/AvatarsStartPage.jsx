@@ -114,6 +114,7 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
         }
 
         const result = await response.json();
+        console.log("functionPhotoSendResult:", result);
         console.log("PHOTO SUCCESS");
 
         // Assuming the API returns { avatarPhotoUrl: 'url_to_generated_avatar' }
