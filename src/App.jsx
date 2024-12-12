@@ -17,7 +17,9 @@ const App = () => {
   };
 
   const handlePhotoUploadDone = (photoUrl) => {
+    console.log("photoUrl", photoUrl)
     if (photoUrl) {
+      console.log("Photo uploaded successfully:", photoUrl);
       setAvatarPhotoUrl(photoUrl);
       setIsPhotoUploaded(true);
     } else {
