@@ -103,7 +103,7 @@ const AvatarStartPage = ({ onPhotoUploadDone }) => {
           },
           body: JSON.stringify({
             imageUrl: uploadedImageUrl, // Public URL from Cloudinary
-            styleImageUrl: "https://example.com/your-style-image.jpg", // Replace with actual style image URL
+            styleImageUrl: "", // Replace with actual style image URL
             textPrompt: "Generate a personalized avatar.", // Replace with your prompt
           }),
         });

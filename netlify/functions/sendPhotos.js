@@ -64,7 +64,7 @@ exports.handler = async (event, context) => {
     const result = await response.json();
     console.log('External API Response:', result);
 
-    const { orderId } = result;
+    const { orderId } = result.body;
     if (!orderId) {
       console.error('orderId not found in the response');
       return {
