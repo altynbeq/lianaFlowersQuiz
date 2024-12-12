@@ -67,7 +67,7 @@ exports.handler = async (event, context) => {
 
     // Adjust this based on the actual structure of the first API's response
     // Assuming orderId is directly under result
-    const { orderId } = result;
+    const { orderId } = result.body;
     if (!orderId) {
       console.error('orderId not found in the response');
       return {
